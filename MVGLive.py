@@ -5,8 +5,8 @@ import sys
 import datetime
 
 def getlivedata(station, entries = 10, ubahn = True, tram = True, bus = True, sbahn = True):
-  productsymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/linie/'
-  linesymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/produkt/'
+  productsymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/produkt/'
+  linesymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/linie/'
 
   s = requests.Session();
 
