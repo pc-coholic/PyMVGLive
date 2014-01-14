@@ -26,10 +26,9 @@ def getlivedata(station, entries = 10, ubahn = True, tram = True, bus = True, sb
     data = json.loads(data)
     stringmap = data[-3]
     stringmap.insert(0, "unused")
-    #objectmap = data[3:-3] # With timemap
     objectmap = data[3:-9]
     objectmap.reverse()
-    #currenttime = data[-9]
+    firstdeparture = data[-9] # The first timestamp is actually the first departure-time, the last one the current time
   else:
     sys.exit('Returned Data is not //OK - Aborting.')
 
@@ -58,8 +57,6 @@ def getlivedata(station, entries = 10, ubahn = True, tram = True, bus = True, sb
         objects.append([])
 
   # Move departuretime from offset (last departure is actually first, first = second, ...
-  firstdeparture = objects[-1][-1]
-  
   for i in range(len(objects)-1, 0, -1):
     objects[i][-1] = objects[i-1][-1]
   objects[0][-1] = firstdeparture 
@@ -91,6 +88,7 @@ def getlivedata(station, entries = 10, ubahn = True, tram = True, bus = True, sb
 
 def getDeparture(current, departure):
   departure = ( longFromBase64(departure) - longFromBase64(current) ) / 1000 // 60
+
   if departure < 0:
     return 0
   else:
