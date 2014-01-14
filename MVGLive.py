@@ -15,7 +15,7 @@ def getlivedata(station, entries = 10, ubahn = True, tram = True, bus = True, sb
             "D6A616B1901EA7F258D3F1C9A20942A1|"
             "de.swm.mvglive.gwt.client.departureView.GuiAnzeigeService|"
             "getDisplayAbfahrtinfos|java.lang.String/2004016611|I|Z|" 
-            + station  + "|1|2|3|4|7|5|6|6|7|7|7|7|8|0|" + str(entries + 1) + "|"
+            + station  + "|1|2|3|4|7|5|6|6|7|7|7|7|8|0|" + str(entries) + "|"
             + str(int(ubahn)) + "|" + str(int(tram)) + "|" + str(int(bus)) + "|" + str(int(sbahn)) + "|")
   headers = {'Content-Type': 'text/x-gwt-rpc; charset=utf-8'}
   r = s.post("http://www.mvg-live.de/MvgLive/mvglive/rpc/guiAnzeigeService", data = payload, headers = headers)
@@ -56,10 +56,16 @@ def getlivedata(station, entries = 10, ubahn = True, tram = True, bus = True, sb
       i += 1
       if field != objectmap[-1]:
         objects.append([])
+
+  # Move departuretime from offset (last departure is actually first, first = second, ...
+  firstdeparture = objects[-1][-1]
+  
+  for i in range(len(objects)-1, 0, -1):
+    objects[i][-1] = objects[i-1][-1]
+  objects[0][-1] = firstdeparture 
  
   #Get the actual data
   departures = []
-  objects = objects[:-1]
   for objectgroup in objects:
     departure = {}
     
@@ -84,8 +90,11 @@ def getlivedata(station, entries = 10, ubahn = True, tram = True, bus = True, sb
   return departures
 
 def getDeparture(current, departure):
-  departure = ( longFromBase64(departure) - longFromBase64(current) ) / 1000
-  return departure // 60
+  departure = ( longFromBase64(departure) - longFromBase64(current) ) / 1000 // 60
+  if departure < 0:
+    return 0
+  else:
+    return departure
 
 # Adapted from https://github.com/dice-cyfronet/gwt-proxy/blob/master/src/com/gdevelop/gwt/syncrpc/Utils.java
 def longFromBase64(value):
