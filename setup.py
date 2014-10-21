@@ -10,7 +10,7 @@ setup(
     author='pc-coholic',
     author_email='martin@pc-coholic.de',
     url='https://github.com/pc-coholic/PyMVGLive',
-    packages=['PyMVGLive'],
+    packages=['MVGLive'],
     classifiers=[
         "Programming Language :: Python :: 2",
         "Intended Audience :: Developers",
