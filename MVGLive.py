@@ -56,6 +56,11 @@ def getlivedata(station, entries = 10, ubahn = True, tram = True, bus = True, sb
       if field != objectmap[-1]:
         objects.append([])
 
+  # if first object is empty, there are no results in this set
+  # there is also another way to check this using the headers, but I forgot how...
+  if (len(objects[0]) == 0):
+    return []
+
   # Move departuretime from offset (last departure is actually first, first = second, ...
   for i in range(len(objects)-1, 0, -1):
     objects[i][-1] = objects[i-1][-1]
