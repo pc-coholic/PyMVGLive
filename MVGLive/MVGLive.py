@@ -13,7 +13,7 @@ class MVGLive(object):
 
     # Depatures
     payload = ("7|0|8|http://www.mvg-live.de/MvgLive/mvglive/|"
-              "D6A616B1901EA7F258D3F1C9A20942A1|"
+              "20589F56B19C8B1615F7A32F69557CD5|"
               "de.swm.mvglive.gwt.client.departureView.GuiAnzeigeService|"
               "getDisplayAbfahrtinfos|java.lang.String/2004016611|I|Z|" 
               + station  + "|1|2|3|4|7|5|6|6|7|7|7|7|8|0|" + str(entries) + "|"
