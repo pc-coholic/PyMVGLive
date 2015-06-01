@@ -3,6 +3,10 @@ import requests
 import json
 import sys
 import datetime
+try:
+    unicode
+except NameError:
+    unicode = str
 
 class MVGLive(object):
   def getlivedata(self, station, entries = 10, ubahn = True, tram = True, bus = True, sbahn = True):

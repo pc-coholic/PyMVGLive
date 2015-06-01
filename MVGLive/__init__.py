@@ -1,1 +1,1 @@
-from MVGLive import MVGLive
+from MVGLive.mvglive import MVGLive
