@@ -4,9 +4,9 @@ import json
 import sys
 import datetime
 try:
-    unicode
+  unicode
 except NameError:
-    unicode = str
+  unicode = str
 
 class MVGLive(object):
   def getlivedata(self, station, entries = 10, ubahn = True, tram = True, bus = True, sbahn = True):
@@ -35,7 +35,7 @@ class MVGLive(object):
       objectmap.reverse()
       firstdeparture = data[-9] # The first timestamp is actually the first departure-time, the last one the current time
     else:
-      sys.exit('Returned Data is not //OK - Aborting.')
+      raise(ValueError('Returned Data is not //OK - Aborting.'))
 
     # Current Time
     payload = "7|0|4|http://www.mvg-live.de/MvgLive/mvglive/|5E1CA9FD268C6C532BCB96DB76FF670A|de.swm.mvglive.gwt.client.clock.ClockService|getCurrentDate|1|2|3|4|0|"
@@ -47,7 +47,7 @@ class MVGLive(object):
       data = json.loads(data)
       currenttime = data[0]
     else:
-      sys.exit('Returned Data is not //OK - Aborting.')
+      raise(ValueError('Returned Data is not //OK - Aborting.'))
    
 
     # Put all departures in separated arrays
