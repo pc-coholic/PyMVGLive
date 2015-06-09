@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='PyMVGLive',
-    version='1.0.0',
+    version='1.1.0',
     description='get live-data from mvg-live.de',
     author='pc-coholic',
     author_email='martin@pc-coholic.de',
@@ -13,6 +13,7 @@ setup(
     packages=['MVGLive'],
     classifiers=[
         "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3",
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
