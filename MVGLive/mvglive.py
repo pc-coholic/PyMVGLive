@@ -13,18 +13,24 @@ class MVGLive(object):
     productsymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/produkt/'
     linesymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/linie/'
 
+    if unicode == str:
+        # Workaround for Python 3
+        station_str = station.encode('utf-8').decode('iso-8859-1')
+    else:
+        station_str = station
+
     s = requests.Session();
 
     # Depatures
     payload = ("7|0|8|http://www.mvg-live.de/MvgLive/mvglive/|"
               "20589F56B19C8B1615F7A32F69557CD5|"
               "de.swm.mvglive.gwt.client.departureView.GuiAnzeigeService|"
-              "getDisplayAbfahrtinfos|java.lang.String/2004016611|I|Z|" 
-              + station  + "|1|2|3|4|7|5|6|6|7|7|7|7|8|0|" + str(entries) + "|"
+              "getDisplayAbfahrtinfos|java.lang.String/2004016611|I|Z|"
+              + station_str  + "|1|2|3|4|7|5|6|6|7|7|7|7|8|0|" + str(entries) + "|"
               + str(int(ubahn)) + "|" + str(int(tram)) + "|" + str(int(bus)) + "|" + str(int(sbahn)) + "|")
     headers = {'Content-Type': 'text/x-gwt-rpc; charset=utf-8'}
     r = s.post("http://www.mvg-live.de/MvgLive/mvglive/rpc/guiAnzeigeService", data = payload, headers = headers)
-    
+
     if (r.text[:4] == '//OK'):
       data = r.text[4:]
       data = data.replace("'", '"')
@@ -40,7 +46,7 @@ class MVGLive(object):
     # Current Time
     payload = "7|0|4|http://www.mvg-live.de/MvgLive/mvglive/|5E1CA9FD268C6C532BCB96DB76FF670A|de.swm.mvglive.gwt.client.clock.ClockService|getCurrentDate|1|2|3|4|0|"
     r = s.post("http://www.mvg-live.de/MvgLive/mvglive/rpc/clockService", data = payload, headers = headers)
-    
+
     if (r.text[:4] == '//OK'):
       data = r.text[4:]
       data = data.replace("'", '"')
@@ -48,7 +54,7 @@ class MVGLive(object):
       currenttime = data[0]
     else:
       raise(ValueError('Returned Data is not //OK - Aborting.'))
-   
+
 
     # Put all departures in separated arrays
     objects = []
@@ -69,18 +75,18 @@ class MVGLive(object):
     # Move departuretime from offset (last departure is actually first, first = second, ...
     for i in range(len(objects)-1, 0, -1):
       objects[i][-1] = objects[i-1][-1]
-    objects[0][-1] = firstdeparture 
-   
+    objects[0][-1] = firstdeparture
+
     #Get the actual data
     departures = []
     for objectgroup in objects:
       departure = {}
-      
+
       if objectgroup[1] < 0:
-        base = -1 
+        base = -1
       else:
         base = 0
-     
+
       departure['linesymbol'] = stringmap[objectgroup[base + 3]]
       departure['linesymbolurl'] = linesymbolsurl + stringmap[objectgroup[base + 3]]
       departure['linename'] = stringmap[objectgroup[base + 4]]
@@ -111,7 +117,7 @@ class MVGLive(object):
     for i in value:
       longval <<= 6
       longval |= self.base64Value(i)
-   
+
     return longval
 
   def base64Value(self, digit):
@@ -126,4 +132,4 @@ class MVGLive(object):
     elif (digit == '_'):
       return 63
     else:
-      pass 
+      pass
