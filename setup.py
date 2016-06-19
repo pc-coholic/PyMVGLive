@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='PyMVGLive',
-    version='1.1.1',
+    version='1.1.2',
     description='get live-data from mvg-live.de',
     author='pc-coholic',
     author_email='martin@pc-coholic.de',
