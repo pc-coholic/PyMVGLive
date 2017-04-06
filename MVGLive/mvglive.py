@@ -9,7 +9,7 @@ except NameError:
   unicode = str
 
 class MVGLive(object):
-  def getlivedata(self, station, timeoffset= 0, entries = 10, ubahn = True, tram = True, bus = True, sbahn = True):
+  def getlivedata(self, station, timeoffset = 0, entries = 10, ubahn = True, tram = True, bus = True, sbahn = True):
     productsymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/produkt/'
     linesymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/linie/'
 
