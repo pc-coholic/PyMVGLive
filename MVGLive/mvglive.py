@@ -9,7 +9,7 @@ except NameError:
   unicode = str
 
 class MVGLive(object):
-  def getlivedata(self, station, entries = 10, ubahn = True, tram = True, bus = True, sbahn = True):
+  def getlivedata(self, station, timeoffset= 0, entries = 10, ubahn = True, tram = True, bus = True, sbahn = True):
     productsymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/produkt/'
     linesymbolsurl = 'http://www.mvg-live.de/MvgLive/images/size30/linie/'
 
@@ -26,7 +26,7 @@ class MVGLive(object):
               "20589F56B19C8B1615F7A32F69557CD5|"
               "de.swm.mvglive.gwt.client.departureView.GuiAnzeigeService|"
               "getDisplayAbfahrtinfos|java.lang.String/2004016611|I|Z|"
-              + station_str  + "|1|2|3|4|7|5|6|6|7|7|7|7|8|0|" + str(entries) + "|"
+              + station_str  + "|1|2|3|4|7|5|6|6|7|7|7|7|8|" + str(timeoffset) + "|" + str(entries) + "|"
               + str(int(ubahn)) + "|" + str(int(tram)) + "|" + str(int(bus)) + "|" + str(int(sbahn)) + "|")
     headers = {'Content-Type': 'text/x-gwt-rpc; charset=utf-8'}
     r = s.post("http://www.mvg-live.de/MvgLive/mvglive/rpc/guiAnzeigeService", data = payload, headers = headers)
