@@ -22,3 +22,10 @@ Configuration variables:
 - **bus** (*Optional*): If 'False', do not display bus departures
     
 - **sbahn** (*Optional*): If 'False', do not display S-Bahn (suburban train) departures
+
+## MVGLive.getdisruptiondata()
+Retrieve current disruptions/status messages from mvg-live.de. Returns headline and description of disruption.
+
+Please note, that this call will execute another API-request and might cause problems with rate-limits imposed by the webservice.
+
+For a saver way, please use [RSS-feed](http://www.mvg-mobil.de/Tickerrss/CreateRssClass) that is also provided by the MVG. You can find a sample implementation [here](https://github.com/muccc/anzeigr/blob/master/current_nodes/mvgdefas/ticker/getmvgticker.py)

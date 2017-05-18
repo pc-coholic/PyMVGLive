@@ -2,6 +2,7 @@
 import requests
 import json
 import sys
+import re
 import datetime
 try:
   unicode
@@ -109,6 +110,50 @@ class MVGLive(object):
       return 0
     else:
       return departure
+
+  def getdisruptiondata(self):
+
+   s = requests.Session();
+
+   # Depatures
+   payload = ("7|0|4|http://www.mvg-live.de/MvgLive/mvglive/|"
+             "7690A2A77A0295D3EC713772A06B8898|"
+             "de.swm.mvglive.gwt.client.newsticker.GuiNewstickerService|"
+             "getNewsticker|1|2|3|4|0|")
+   headers = {'Content-Type': 'text/x-gwt-rpc; charset=utf-8'}
+   r = s.post("http://www.mvg-live.de/MvgLive/mvglive/rpc/newstickerService", data = payload, headers = headers)
+
+   if (r.text[:4] == '//OK'):
+     data = r.text[4:]
+     data = data.replace("'", '"')
+     data = json.loads(data)
+
+     for _item in data:
+         if not isinstance(_item, list):
+            continue
+         okay_items = _item
+         break
+
+     regex = re.compile('java.util.ArrayList|de.swm.mvglive.gwt.client.newsticker.NewstickerItem')
+     okay_items = [x for x in okay_items if not regex.match(x)]
+
+     #elements alternate, first is the headline, second is the description
+     headlines = okay_items[::2]  # Headlines, Start at first element, then every other.
+     details = okay_items[1::2] # Details, start at second element, then every other.
+
+     #No disruption is no disruption...
+     if len(headlines) == 1 and headlines[0] == 'Zurzeit liegen keine Meldungen vor. Wir wünschen Ihnen gute Fahrt mit U-Bahn, Bus und Tram - Ihre MVG.':
+        return []
+
+     disruptions = []
+     for i in range(len(headlines)):
+        disruption = {'headline': headlines[i], 'details': details[i]}
+        disruptions.append(disruption)
+     return disruptions
+
+   else:
+     raise(ValueError('Returned Data is not //OK - Aborting.'))
+
 
   # Adapted from https://github.com/dice-cyfronet/gwt-proxy/blob/master/src/com/gdevelop/gwt/syncrpc/Utils.java
   def longFromBase64(self, value):
